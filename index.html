@@ -148,11 +148,7 @@
             animation: fadeIn 2s forwards;
             z-index: 100;
             text-align: right;
-            text-shadow: 
-                -1px -1px 0 #000,  
-                 1px -1px 0 #000,
-                -1px  1px 0 #000,
-                 1px  1px 0 #000;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         .trauma-word {
@@ -290,10 +286,10 @@
         "wandering": "wandering.png", 
         "school_librarian1": "https://placehold.co/800x600/dcedc8/33691e?text=New+Librarian",
         "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library",
-        // 새로 추가된 배경 (실제 파일로 교체 권장)
         "bridge": "https://placehold.co/800x600/87CEEB/fff?text=Bridge+of+Love",
         "jesus_love": "https://placehold.co/800x600/FFD700/fff?text=Jesus+Love",
-        "acceptance": "https://placehold.co/800x600/FFFFFF/000?text=Acceptance"
+        "acceptance": "https://placehold.co/800x600/FFFFFF/000?text=Acceptance",
+        "Bible": "https://placehold.co/800x600/5D4037/fff?text=Bible+Study"
     };
 
     let currentScore = 0;
@@ -344,6 +340,7 @@
         "mom_request": { text: "엄마는 반의 아이들을 찾아가서 자신의 아이와 사이좋게 지내주길 간곡히 부탁한다.", next: "no_change" },
         "no_change": { text: "그러나 상황이 크게 나아지진 않았다.", next: "worse" },
         "worse": { text: "이전엔 대놓고 있었던 괴롭힘은 점점 더 교묘해져, 어른들의 눈이 닿지 않는 곳에서 그 손길을 뻗쳤다.", next: "choice_teacher" },
+        
         "choice_teacher": {
             text: "선생: “XX아, 친구랑 대화를 해야지. 그렇게 혼자다니면 안 돼.”\n\n아이: “.......”",
             bg: "bad_teacher",
@@ -354,6 +351,7 @@
                 { text: ".......", next: "revenge_thought" }
             ]
         },
+
         "bad_run": {
             lines: [
                 "그들을 피해 멀리 도망가는 것도 하나의 방법일 것이다.",
@@ -419,14 +417,13 @@
         "gospel_intro": { text: "그 사람은 “복음”이라는 것을 전해주었다.\n\n하지만 아이의 귀엔 들어오지 않았다.", next: "focus_results" },
         "focus_results": { text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.", next: "choice_gospel" },
 
-        // --- 여기서부터 신규 추가 내용 (4번 선택지) ---
         "choice_gospel": {
             text: "선배: “당신에게 해 줄 말이 있어요.”",
             isChoice: true,
             choices: [
-                { text: "“이상한 사람이다. 멀리 피해 다녀야겠다.”", next: "reject_4_1" },
-                { text: "“그래도 한번 들어나 보자.”", next: "curious_4_2" },
-                { text: "“내가 정말 듣고싶었던 이야기이다. 진지하게 들어보자.”", next: "accept_4_3" }
+                { text: "이상한 사람이다. 멀리 피해 다녀야겠다.", next: "reject_4_1" },
+                { text: "그래도 한번 들어나 보자.", next: "curious_4_2" },
+                { text: "내가 정말 듣고싶었던 이야기이다. 진지하게 들어보자.", next: "accept_4_3" }
             ]
         },
 
@@ -456,7 +453,7 @@
         },
         "realize_gospel_delayed": {
             text: "“복음”은 예수님의 “사랑”에 대한 이야기라고 하였다.\n이 말은 내가 진실로 듣고싶었던 말이었다.\n\n그동안 나는 이 세상에서 ‘무쓸모’하고 ‘사랑받을 수 없는’존재로 여겨왔기 때문이었다.\n\n그런데, 이런 ‘나’를 사랑한다니",
-            score: 3, // 지연된 성장 점수
+            score: 3, 
             bg: "jesus_love",
             next: "unconditional_love"
         },
@@ -464,21 +461,85 @@
         // 4-3 루트 (직행)
         "accept_4_3": {
             text: "“복음”은 예수님의 “사랑”에 대한 이야기라고 하였다.\n이 말은 내가 진실로 듣고싶었던 말이었다.\n\n그동안 나는 이 세상에서 ‘무쓸모’하고 ‘사랑받을 수 없는’존재로 여겨왔기 때문이었다.\n\n그런데, 이런 ‘나’를 사랑한다니",
-            score: 6, // 직행 보너스 점수
+            score: 6, 
             bg: "jesus_love",
             next: "unconditional_love"
         },
 
-        // 공통 결말
         "unconditional_love": {
             text: "아무런 조건없이, 아무런 배경없이.\n\n그저 있는 그대로의 “나”를 사랑하여주신다 하셨다.",
             next: "final_decision"
         },
         "final_decision": {
-            text: "나는 그 자리에서 예수님을 믿기로 결심했다.",
+            text: "아이는 그 자리에서 예수님을 믿기로 결심했다.",
             score: 4,
             bg: "acceptance",
-            next: null // 데모 끝
+            next: "bible_study"
+        },
+        
+        // --- [신규 추가] 이후 시나리오 ---
+        "bible_study": {
+            text: "이후에 선배는 『성경』을 통하여 계속해서 예수님의 사랑에 대해서 설명해 주었다.",
+            bg: "Bible",
+            next: "gods_plan"
+        },
+        "gods_plan": {
+            text: "그리고 그 사랑을 이루시기 위해 하나님께서 이 세상이 창조되기 전부터 계획하시고 역사를 통해 이루어 가셨다고 설명을 해주었다.",
+            next: "sowing_seeds"
+        },
+        "sowing_seeds": {
+            text: "이 말들이 전부 이해되는 것은 아니지만, 아이에 마음에 조금 씩 심겨졌다.",
+            score: 2,
+            next: "summer_vacation"
+        },
+        "summer_vacation": {
+            text: "시간이 흘러 어느덧 여름방학이 다가왔다.\n\n선배는 아이에게 한 가지 제안을 하였다.\n“이곳에서 우리와 같이 성경에 대해서 배워갈래?”",
+            next: "vacation_conflict"
+        },
+        "vacation_conflict": {
+            text: "아이는 고민했다.\n20살 성인이 되고 첫 방학.\n\n아이는 나름 계획해 놓은 것들이 많이 있었고, 하고싶은 것도 많았다.\n자격증, 여행, 문화생활….",
+            next: "senior_persuasion"
+        },
+        "senior_persuasion": {
+            text: "선배는 덧붙였다.\n“그것도 물론 중요하지만, 영원히 남는 더 가치있는 것에 투자해 봐.”",
+            isChoice: true,
+            choices: [
+                { text: "글쎄… 잘 모르겠다.", next: "unsure_5_1" },
+                { text: "무슨, 왜 내 삶에 관여하지? 내가 누리고 싶은 나만의 “행복”이 있어.", next: "myway_5_2" },
+                { text: "더 가치있는 것이라고? 그게 뭐지?", next: "curious_5_1" } // 5-1과 동일 루트로 처리 (긍정)
+            ]
+        },
+
+        // 5-1 (성장 루트)
+        "unsure_5_1": {
+            text: "아이는 아직 확신이 없었다.\n‘정말 그게 가치가 있는 거라고?’\n\n고민은 되었지만, 그래도 한 번 배워보기로 했다.",
+            score: 3,
+            next: null // 다음 업데이트 예고 (혹은 계속)
+        },
+        "curious_5_1": { // 선택지 3번용 (긍정)
+            text: "‘도대체 무엇이기에 그렇게 말하는 걸까?’\n호기심이 생겼다.\n\n그래도 한 번 배워보기로 했다.",
+            score: 3,
+            next: null
+        },
+
+        // 5-2, 5-3 (End2 루트)
+        "myway_5_2": {
+            text: "그들의 제안은 자신을 옭죄는 것처럼 느껴졌다.\n\n아이는 방학이 되자 그대로 고향으로 내려가고, 자신만의 “행복”을 찾아 떠났다.",
+            next: "contact_lost"
+        },
+        "contact_lost": {
+            text: "그리고 이후엔 연락이 끊어졌다.",
+            next: "end_visible_happiness"
+        },
+        
+        // 5-3에 해당하는 내용도 5-2 흐름과 유사하게 처리하거나 별도 분기 가능
+        // 여기서는 선택지 2번을 눌렀을 때 End2로 감. 
+        // 선택지 3번은 긍정적 호기심으로 보아 성장루트로 합침.
+        
+        "end_visible_happiness": {
+            text: "<span class='ending-label'>[End2: 눈에 보이는 행복]</span>",
+            bg: "wandering", // End2 배경 (재사용)
+            next: null
         }
     };
 
@@ -491,8 +552,7 @@
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
             
-            // [수정] wandering 배경일 때는 완전 불투명 및 흐림 제거
-            if (scene.bg === 'wandering') {
+            if (scene.bg === 'wandering' || scene.bg === 'acceptance') {
                 bgLayer.style.opacity = '1';
                 bgLayer.style.filter = 'none';
             } else {
@@ -558,7 +618,7 @@
                 };
                 choiceBox.appendChild(btn);
             } else {
-                if (sceneId === "end_wandering" || sceneId === "final_decision") {
+                if (sceneId === "end_wandering" || sceneId === "end_visible_happiness" || sceneId === "final_decision") {
                     const restartBtn = document.createElement('button');
                     restartBtn.className = 'btn';
                     restartBtn.innerText = "처음으로 돌아가기";
@@ -568,8 +628,8 @@
                         updateEnvironment();
                     };
                     choiceBox.appendChild(restartBtn);
-                } else {
-                    const endTxt = document.createElement('div');
+                } else if (!scene.next) { // 다음 장면이 없는 경우 (진행형 엔딩)
+                     const endTxt = document.createElement('div');
                     endTxt.innerHTML = "<br><i>- To Be Continued -</i>";
                     endTxt.style.opacity = "0.7";
                     choiceBox.appendChild(endTxt);
