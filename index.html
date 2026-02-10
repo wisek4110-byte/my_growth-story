@@ -2,16 +2,18 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>continue in what you have inside</title>
     <style>
         :root {
-            --bg-lightness: 5%; /* 초기 밝기 (어둠) */
+            --bg-lightness: 5%;
             --base-bg-color: hsl(0, 0%, var(--bg-lightness));
             --text-color: #f0f0f0;
             --accent-red: #ff3333;
             --transition-speed: 1.5s;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -22,12 +24,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
-        /* 게임 컨테이너 */
         #game-container {
             width: 100%;
             max-width: 800px;
@@ -41,7 +42,18 @@
             transition: border-color var(--transition-speed);
         }
 
-        /* 배경 이미지 레이어 */
+        @media (max-width: 768px) {
+            #game-container {
+                max-width: 100%;
+                height: 100dvh;
+                border: none;
+                border-radius: 0;
+            }
+            .dialogue { font-size: 1.1rem !important; line-height: 1.6 !important; }
+            #choice-container { padding: 20px !important; min-height: 140px; }
+            .btn { padding: 16px !important; font-size: 1rem !important; }
+        }
+
         #bg-layer {
             position: absolute;
             top: 0;
@@ -50,13 +62,12 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            opacity: 0; /* 기본 숨김 */
-            filter: blur(5px); /* 흐림 효과 */
+            opacity: 0;
+            filter: blur(5px);
             z-index: 0;
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* UI 콘텐츠 레이어 */
         #ui-layer {
             position: relative;
             z-index: 10;
@@ -64,9 +75,9 @@
             flex-direction: column;
             height: 100%;
             background: rgba(0,0,0,0.02);
+            width: 100%;
         }
 
-        /* 상단 상태바 */
         #status-bar {
             padding: 15px 20px;
             border-bottom: 1px solid var(--text-color);
@@ -75,17 +86,18 @@
             align-items: center;
             font-size: 0.95rem;
             transition: border-color var(--transition-speed);
+            flex-shrink: 0;
         }
 
-        /* 메인 텍스트 영역 */
         #display-area {
             flex-grow: 1;
-            padding: 40px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            width: 100%;
         }
 
         .dialogue {
@@ -95,9 +107,9 @@
             animation: fadeIn 0.8s ease-in;
             word-break: keep-all;
             text-shadow: 0 0 8px rgba(0,0,0,0.8);
+            max-width: 90%;
         }
 
-        /* 트라우마 텍스트 효과 */
         .trauma-word {
             position: absolute;
             font-family: 'Courier New', monospace;
@@ -106,6 +118,7 @@
             opacity: 0;
             animation: glitchPop 0.15s forwards;
             z-index: 20;
+            white-space: nowrap;
         }
         
         .trauma-red {
@@ -113,7 +126,6 @@
             text-shadow: 2px 2px 0px #000;
         }
 
-        /* 배드엔딩 텍스트 애니메이션 */
         .bad-end-line {
             opacity: 0;
             margin: 10px 0;
@@ -121,24 +133,24 @@
             animation: slideUpFade 1.5s forwards;
         }
         
-        /* 일반 엔딩 타이틀 */
         .normal-end-title {
             font-weight: bold;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-top: 20px;
             display: block;
             color: inherit;
         }
 
-        /* 선택지 영역 */
         #choice-container {
             padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             min-height: 120px;
             justify-content: center;
             background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+            flex-shrink: 0;
+            width: 100%;
         }
 
         .btn {
@@ -149,14 +161,20 @@
             cursor: pointer;
             font-size: 1.1rem;
             transition: all 0.3s;
-            border-radius: 4px;
+            border-radius: 8px;
             backdrop-filter: blur(2px);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
+        
+        .btn:active { transform: scale(0.98); }
 
         .next-btn {
             border: none;
@@ -164,9 +182,10 @@
             text-align: right;
             padding-right: 30px;
             background: transparent;
+            margin-left: auto;
+            width: auto;
         }
 
-        /* 알림창 */
         #notif {
             position: absolute;
             top: 70px;
@@ -181,6 +200,8 @@
             transition: opacity 0.5s;
             z-index: 100;
             pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .show-notif { opacity: 1 !important; }
@@ -213,9 +234,8 @@
 </div>
 
 <script>
-    // --- 배경 이미지 설정 ---
     const bgImages = {
-        "baby": "baby.png", 
+        "baby": "https://placehold.co/800x600/333/999?text=Baby+Born", 
         "malice": "https://placehold.co/800x600/220000/red?text=Malice",
         "suffering": "https://placehold.co/800x600/000/red?text=Trauma",
         "bad_teacher": "https://placehold.co/800x600/444/fff?text=Teacher+Classroom",
@@ -239,7 +259,6 @@
         return "🌰 씨앗";
     }
 
-    // 시나리오 데이터
     const scenes = {
         "start": { text: "여기, 한 아이가 세상에 태어났다.", bg: "baby", next: "2" },
         "2": { text: "아이는 부모 밑에서 먹고, 자라고, 배워가며.... 사회의 일원이 되길위한 준비를 해 나간다.", next: "3" },
@@ -358,7 +377,7 @@
             ]
         },
 
-        // --- 3-1 루트: 순응 (End1) ---
+        // 3-1
         "conformity_1": {
             text: "“어차피 나는 특별히 잘 하는 것도… 좋아하는 것도 없는 걸.”\n\n그저 부모가 원하는대로, 사회가 원하는대로….\n그러면 “행복”할까?",
             next: "conformity_2"
@@ -373,14 +392,14 @@
             next: null
         },
 
-        // --- 3-2 루트: 성장 (사서) ---
+        // 3-2
         "thinking_life": {
             text: "‘쳇바퀴처럼 도는 인생이 정말 인생의 전부일까?’\n\n아이는 고민했다.",
             next: "seeking_happiness"
         },
         "seeking_happiness": {
             text: "그리고 아이는 나름의 “행복”을 찾고 싶었다.",
-            score: 2, // 즉시 성장+2
+            score: 2,
             next: "still_lost"
         },
         "still_lost": {
@@ -399,7 +418,7 @@
         },
         "found_goal": {
             text: "처음으로 아이는 목표가 생겼다.\n\n‘나도 나중에 저런 “사서”가 되고싶어.’",
-            score: 4, // 즉시 성장+4
+            score: 4,
             next: "uni_entry"
         },
         "uni_entry": {
@@ -408,7 +427,7 @@
         },
         "desert_feeling": {
             text: "대학 합격의 기쁨도 잠시, 아이는 낯선도시, 낯선환경, 부모가 없는 낯선 상황에 어찌할 바를 몰랐다.\n\n그야말로 사막 한 가운데에 떨어진 듯한 기분이었다.",
-            next: null // 다음 업데이트에 계속
+            next: null
         }
     };
 
@@ -418,26 +437,21 @@
         const choiceBox = document.getElementById('choice-container');
         const bgLayer = document.getElementById('bg-layer');
 
-        // 배경 처리
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            bgLayer.style.opacity = '0.6';
+            bgLayer.style.opacity = '0.45'; // 오퍼시티 45로 조정
         } else {
             bgLayer.style.opacity = '0';
             bgLayer.style.backgroundImage = 'none';
         }
 
-        // 트라우마 처리
         if (scene.type === 'start_trauma') startTraumaEffect();
         if (scene.type === 'stop_trauma') stopTraumaEffect();
 
-        // 선택지 화면 체크포인트 저장
         if (scene.isChoice) {
             checkpoint = { sceneId: sceneId, score: currentScore };
         }
 
-        // [점수 즉시 반영 로직]
-        // 선택지가 없는 화면에서 점수가 있다면 즉시 반영
         if (scene.score && !scene.isChoice) {
             applyScore(scene.score);
         }
@@ -446,7 +460,6 @@
         choiceBox.innerHTML = '';
 
         if (scene.isBadEnd) {
-            // 배드엔딩 처리
             let delay = 0;
             scene.lines.forEach((line) => {
                 const p = document.createElement('div');
@@ -464,10 +477,8 @@
                 choiceBox.appendChild(btn);
             }, (scene.lines.length * 1200) + 500);
         } else {
-            // 일반 텍스트 출력
             if (!scene.autoText) dialogueBox.innerHTML = scene.text;
 
-            // 선택지 버튼 생성
             if (scene.choices) {
                 scene.choices.forEach(choice => {
                     const btn = document.createElement('button');
@@ -480,18 +491,15 @@
                     choiceBox.appendChild(btn);
                 });
             } else if (scene.next) {
-                // "다음" 버튼 생성
                 const btn = document.createElement('button');
                 btn.className = 'btn next-btn';
                 btn.innerText = "다음 ▶";
                 btn.onclick = () => {
-                    // 이미 위에서 점수를 반영했으므로 여기서는 페이지만 넘김
                     renderScene(scene.next);
                 };
                 choiceBox.appendChild(btn);
             } else {
-                // 엔딩 또는 끝
-                if (sceneId === "end_wandering") {
+                if (sceneId === "end_wandering" || sceneId === "desert_feeling") {
                     const restartBtn = document.createElement('button');
                     restartBtn.className = 'btn';
                     restartBtn.innerText = "처음으로 돌아가기";
@@ -565,13 +573,14 @@
             span.className = 'trauma-word';
             if (w.c === 'red') span.classList.add('trauma-red');
             span.innerText = w.t;
-            span.style.left = Math.random() * 90 + "%";
-            span.style.top = Math.random() * 90 + "%";
-            span.style.fontSize = (Math.random() * 2 + 1) + "rem";
+            const fontSize = Math.random() * 1.5 + 1;
+            span.style.fontSize = fontSize + "rem";
+            span.style.left = Math.random() * 80 + 10 + "%";
+            span.style.top = Math.random() * 80 + 10 + "%";
             span.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
             document.body.appendChild(span);
             setTimeout(() => span.remove(), 600);
-        }, 80);
+        }, 100);
     }
 
     function stopTraumaEffect() {
@@ -586,5 +595,4 @@
     updateEnvironment();
 </script>
 </body>
-
 </html>
