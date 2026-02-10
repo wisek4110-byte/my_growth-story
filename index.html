@@ -114,6 +114,7 @@
             align-items: center;
             text-align: center;
             width: 100%;
+            position: relative; /* End1 위치 잡기 위해 */
         }
 
         .dialogue {
@@ -124,6 +125,7 @@
             word-break: keep-all;
             text-shadow: 0 0 8px rgba(0,0,0,0.8);
             max-width: 90%;
+            width: 100%;
         }
 
         /* 트라우마 대사 (복수 등) 스타일 */
@@ -133,15 +135,17 @@
             letter-spacing: 2px;
         }
 
-        /* End1 서명 스타일 */
-        .end-signature {
+        /* [수정] End1: 오른쪽 위에 위치 */
+        .end-signature-top {
             display: block;
-            margin-top: 30px;
             text-align: right;
-            font-size: 0.9rem; /* 보통보다 약간 작게 */
+            font-size: 0.9rem;
             font-weight: normal;
             font-family: 'YES24', sans-serif;
-            width: 100%;
+            margin-bottom: 20px; /* 텍스트 위쪽으로 배치 느낌 */
+            color: var(--text-color);
+            opacity: 0;
+            animation: fadeIn 2s forwards;
         }
 
         /* 트라우마 떠다니는 글자 */
@@ -204,6 +208,7 @@
         
         .btn:active { transform: scale(0.98); }
 
+        /* [수정] 다음 버튼 스타일: 자간만 넓어짐 */
         .next-btn {
             border: none;
             font-style: italic;
@@ -212,13 +217,14 @@
             background: transparent;
             margin-left: auto;
             width: auto;
-            transition: letter-spacing 0.3s ease; 
+            transition: letter-spacing 0.4s ease; 
         }
 
         .next-btn:hover {
-            letter-spacing: 5px;
+            letter-spacing: 6px; /* 자간 확장 */
             background: transparent;
             transform: none;
+            /* color 변화 없음 */
         }
 
         #notif {
@@ -299,13 +305,16 @@
         "start": { text: "여기, 한 아이가 세상에 태어났다.", bg: "baby", next: "2" },
         "2": { text: "아이는 부모 밑에서 먹고, 자라고, 배워가며.... 사회의 일원이 되길위한 준비를 해 나간다.", next: "3" },
         "3": { text: "그러나 세상은 아이에게 너무나도 차갑고 냉혹했다.", next: "4" },
-        "4": { text: "아이: \"저, 저기....\"", next: "malice_start" },
+        "4": { text: "아이: “저, 저기....”", next: "malice_start" },
         "malice_start": { text: "아이를 괴롭히는 근거없는 악의들이 계속해서 쏟아진다...", bg: "malice", next: "trauma_start" },
+        
+        // [수정] 트라우마 구간: 텍스트가 쌓이며 화면을 덮음
         "trauma_start": { text: "", bg: "suffering", type: "start_trauma", next: "violence", autoText: " " },
-        "violence": { text: "어떤 아이가 아이의 머리를 퍽 치고 도망간다.\n\n\"멍~청이!\"", type: "stop_trauma", next: "silence" },
-        "silence": { text: "아이: \".......\"", next: "wither" },
+        
+        "violence": { text: "어떤 아이가 아이의 머리를 퍽 치고 도망간다.\n\n“멍~청이!”", type: "stop_trauma", next: "silence" },
+        "silence": { text: "아이: “.......”", next: "wither" },
         "wither": { text: "아이는 점점 위축되어간다. 혼자 방에 들어가 조용히 베개를 적시는 일이 많아진다.", next: "cry" },
-        "cry": { text: "아이: \"흑흑... 엄마아....\"", next: "choice_mom" },
+        "cry": { text: "아이: “흑흑... 엄마아....”", next: "choice_mom" },
         "choice_mom": {
             text: "엄마: \"아, 아가... 무슨 일이야? 왜 그래?\"",
             isChoice: true,
@@ -324,7 +333,7 @@
             ],
             isBadEnd: true
         },
-        "mom_help": { text: "엄마: \"괜찮아. 괜찮아. 엄마가 도와줄게.\"", next: "mom_action" },
+        "mom_help": { text: "엄마: “괜찮아. 괜찮아. 엄마가 도와줄게.”", next: "mom_action" },
         "mom_action": { text: "아이의 엄마는 학교로 찾아가 담임선생을 만난다.", next: "not_alone" },
         "not_alone": { text: "아이는 처음으로 혼자가 아님을 느낀다.", next: "mom_request" },
         "mom_request": { text: "엄마는 반의 아이들을 찾아가서 자신의 아이와 사이좋게 지내주길 간곡히 부탁한다.", next: "no_change" },
@@ -332,7 +341,7 @@
         "worse": { text: "이전엔 대놓고 있었던 괴롭힘은 점점 더 교묘해져, 어른들의 눈이 닿지 않는 곳에서 그 손길을 뻗쳤다.", next: "choice_teacher" },
         
         "choice_teacher": {
-            text: "선생: \"XX아, 친구랑 대화를 해야지. 그렇게 혼자다니면 안 돼.\"\n\n아이: \".......\"",
+            text: "선생: “XX아, 친구랑 대화를 해야지. 그렇게 혼자다니면 안 돼.”\n\n아이: “.......”",
             bg: "bad_teacher",
             isChoice: true,
             choices: [
@@ -360,7 +369,6 @@
         },
         "revenge_thought": { text: "아이는 대답하지 않는다. 그렇지만, 아이의 마음 속에는 무언가가 한 가지의 감정이 떠오른다.", next: "revenge_word" },
         
-        // --- [수정] 트라우마 폰트 적용 ---
         "revenge_word": { 
             text: "<span class='trauma-dialogue'>“복수”</span>", 
             next: "revenge_will" 
@@ -426,23 +434,28 @@
             ]
         },
 
-        // 3-1 루트 (End1)
+        // --- 3-1 루트 (End1) ---
         "conformity_1": {
             text: "“어차피 나는 특별히 잘 하는 것도… 좋아하는 것도 없는 걸.”\n\n그저 부모가 원하는대로, 사회가 원하는대로….\n그러면 “행복”할까?",
             next: "conformity_2"
         },
         "conformity_2": {
             text: "아이는 자신의 성적에 맞춰 적당한 과를 지원하여 합격했다.\n그곳에서 조용히 다니며 어찌저지 졸업했다.",
+            next: "end_wandering_pre"
+        },
+        "end_wandering_pre": {
+            text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…",
+            bg: "wandering",
             next: "end_wandering"
         },
         "end_wandering": {
-            // [수정] End1 스타일 적용 (우측 하단, 작게)
-            text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…\n<span class='end-signature'>[End1: 이 또한 삶이리라]</span>",
+            // [수정] End1: 우측 상단 표시
+            text: "<span class='end-signature-top'>[End1: 이 또한 삶이리라]</span>",
             bg: "wandering",
             next: null
         },
 
-        // 3-2 루트 (사서 -> 대학 -> 전도)
+        // --- 3-2 루트 (사서 -> 전도) ---
         "thinking_life": {
             text: "‘쳇바퀴처럼 도는 인생이 정말 인생의 전부일까?’\n\n아이는 고민했다.",
             next: "seeking_happiness"
@@ -480,7 +493,7 @@
             next: "met_stranger"
         },
         "met_stranger": {
-            text: "그리고 그곳에서 한 사람을 만났다.\n\n지금까지와는 전혀 다른 삶을 살아가도록 안내하는 한 사람을.",
+            text: "그리고 그곳에서 한 사람을 만났다.\n\n지금까지와는 전혀 다른 삶을 살아가도록 안내하는 한 사람을",
             next: "stranger_reaction"
         },
         "stranger_reaction": {
@@ -505,7 +518,7 @@
 
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            bgLayer.style.opacity = '0.88'; // 오퍼시티 88
+            bgLayer.style.opacity = '0.88'; // [수정] 오퍼시티 88
         } else {
             bgLayer.style.opacity = '0';
             bgLayer.style.backgroundImage = 'none';
@@ -633,19 +646,27 @@
             {t: "너 같은 건 쓸모없어", c: "red"}, {t: "공기아까워", c: "red"},
             {t: "멍청이", c: ""}, {t: "사라져", c: "red"}
         ];
+        // [수정] 텍스트가 사라지지 않고 쌓이도록 로직 변경 (화면을 덮어가기 위해)
         traumaInterval = setInterval(() => {
             const w = words[Math.floor(Math.random() * words.length)];
             const span = document.createElement('span');
             span.className = 'trauma-word';
             if (w.c === 'red') span.classList.add('trauma-red');
             span.innerText = w.t;
-            const fontSize = Math.random() * 1.5 + 1;
+            
+            // 랜덤 폰트 크기 (1rem ~ 3rem)
+            const fontSize = Math.random() * 2 + 1;
             span.style.fontSize = fontSize + "rem";
-            span.style.left = Math.random() * 80 + 10 + "%";
-            span.style.top = Math.random() * 80 + 10 + "%";
+            
+            // 랜덤 위치
+            span.style.left = Math.random() * 90 + "%";
+            span.style.top = Math.random() * 90 + "%";
+            
+            // 랜덤 회전
             span.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+            
             document.body.appendChild(span);
-            setTimeout(() => span.remove(), 600);
+            // 삭제(remove) 코드를 제거하여 화면에 계속 쌓이게 함
         }, 100);
     }
 
@@ -654,6 +675,7 @@
             clearInterval(traumaInterval);
             traumaInterval = null;
         }
+        // 다음 화면으로 넘어갈 때 쌓인 텍스트 일괄 삭제
         document.querySelectorAll('.trauma-word').forEach(e => e.remove());
     }
 
