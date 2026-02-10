@@ -105,6 +105,7 @@
             flex-shrink: 0;
         }
 
+        /* 메인 텍스트 영역 */
         #display-area {
             flex-grow: 1;
             padding: 20px;
@@ -114,7 +115,7 @@
             align-items: center;
             text-align: center;
             width: 100%;
-            position: relative; /* End1 위치 잡기 위해 */
+            position: relative; /* 자식 요소(엔딩라벨)의 절대 위치 기준점 */
         }
 
         .dialogue {
@@ -135,17 +136,20 @@
             letter-spacing: 2px;
         }
 
-        /* [수정] End1: 오른쪽 위에 위치 */
-        .end-signature-top {
-            display: block;
-            text-align: right;
-            font-size: 0.9rem;
+        /* [수정] 일반/해피/트루 엔딩 라벨: 화면 우측 상단 고정 */
+        .ending-label {
+            position: absolute; /* 절대 위치 */
+            top: 20px;          /* 위에서 20px */
+            right: 20px;        /* 오른쪽에서 20px */
+            font-size: 1rem;
             font-weight: normal;
             font-family: 'YES24', sans-serif;
-            margin-bottom: 20px; /* 텍스트 위쪽으로 배치 느낌 */
             color: var(--text-color);
             opacity: 0;
-            animation: fadeIn 2s forwards;
+            animation: fadeIn 3s forwards; /* 천천히 나타남 */
+            z-index: 100;
+            text-align: right;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8); /* 가독성 확보 */
         }
 
         /* 트라우마 떠다니는 글자 */
@@ -208,7 +212,6 @@
         
         .btn:active { transform: scale(0.98); }
 
-        /* [수정] 다음 버튼 스타일: 자간만 넓어짐 */
         .next-btn {
             border: none;
             font-style: italic;
@@ -217,14 +220,13 @@
             background: transparent;
             margin-left: auto;
             width: auto;
-            transition: letter-spacing 0.4s ease; 
+            transition: letter-spacing 0.3s ease; 
         }
 
         .next-btn:hover {
-            letter-spacing: 6px; /* 자간 확장 */
+            letter-spacing: 5px;
             background: transparent;
             transform: none;
-            /* color 변화 없음 */
         }
 
         #notif {
@@ -308,7 +310,6 @@
         "4": { text: "아이: “저, 저기....”", next: "malice_start" },
         "malice_start": { text: "아이를 괴롭히는 근거없는 악의들이 계속해서 쏟아진다...", bg: "malice", next: "trauma_start" },
         
-        // [수정] 트라우마 구간: 텍스트가 쌓이며 화면을 덮음
         "trauma_start": { text: "", bg: "suffering", type: "start_trauma", next: "violence", autoText: " " },
         
         "violence": { text: "어떤 아이가 아이의 머리를 퍽 치고 도망간다.\n\n“멍~청이!”", type: "stop_trauma", next: "silence" },
@@ -449,13 +450,13 @@
             next: "end_wandering"
         },
         "end_wandering": {
-            // [수정] End1: 우측 상단 표시
-            text: "<span class='end-signature-top'>[End1: 이 또한 삶이리라]</span>",
+            // [수정] End1: 화면 우측 상단 고정 (.ending-label 사용)
+            text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>",
             bg: "wandering",
             next: null
         },
 
-        // --- 3-2 루트 (사서 -> 전도) ---
+        // --- 3-2 루트 ---
         "thinking_life": {
             text: "‘쳇바퀴처럼 도는 인생이 정말 인생의 전부일까?’\n\n아이는 고민했다.",
             next: "seeking_happiness"
@@ -506,7 +507,7 @@
         },
         "focus_results": {
             text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.",
-            next: null // 데모 끝
+            next: null
         }
     };
 
@@ -518,7 +519,7 @@
 
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            bgLayer.style.opacity = '0.88'; // [수정] 오퍼시티 88
+            bgLayer.style.opacity = '0.88'; // 오퍼시티 88
         } else {
             bgLayer.style.opacity = '0';
             bgLayer.style.backgroundImage = 'none';
@@ -646,7 +647,7 @@
             {t: "너 같은 건 쓸모없어", c: "red"}, {t: "공기아까워", c: "red"},
             {t: "멍청이", c: ""}, {t: "사라져", c: "red"}
         ];
-        // [수정] 텍스트가 사라지지 않고 쌓이도록 로직 변경 (화면을 덮어가기 위해)
+        // 텍스트 누적 (remove 없음)
         traumaInterval = setInterval(() => {
             const w = words[Math.floor(Math.random() * words.length)];
             const span = document.createElement('span');
@@ -654,19 +655,14 @@
             if (w.c === 'red') span.classList.add('trauma-red');
             span.innerText = w.t;
             
-            // 랜덤 폰트 크기 (1rem ~ 3rem)
             const fontSize = Math.random() * 2 + 1;
             span.style.fontSize = fontSize + "rem";
             
-            // 랜덤 위치
             span.style.left = Math.random() * 90 + "%";
             span.style.top = Math.random() * 90 + "%";
-            
-            // 랜덤 회전
             span.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
             
             document.body.appendChild(span);
-            // 삭제(remove) 코드를 제거하여 화면에 계속 쌓이게 함
         }, 100);
     }
 
@@ -675,7 +671,6 @@
             clearInterval(traumaInterval);
             traumaInterval = null;
         }
-        // 다음 화면으로 넘어갈 때 쌓인 텍스트 일괄 삭제
         document.querySelectorAll('.trauma-word').forEach(e => e.remove());
     }
 
