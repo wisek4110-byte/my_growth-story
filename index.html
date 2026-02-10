@@ -135,9 +135,9 @@
             letter-spacing: 2px;
         }
 
-        /* 핏빛 붉은색 스타일 */
+        /* 핏빛 붉은색 스타일 (#A52A2A) */
         .blood-red {
-            color: #A52A2A;
+            color: #A52A2A !important;
         }
 
         /* 일반/해피/트루 엔딩 라벨: 화면 우측 상단 고정 */
@@ -289,7 +289,7 @@
         "bad_teacher": "https://placehold.co/800x600/444/fff?text=Teacher+Classroom",
         "book": "https://placehold.co/800x600/3e2723/fff?text=Library+Books",
         "crossroad": "https://placehold.co/800x600/555/eee?text=Crossroad",
-        "wandering": "wandering.png",
+        "wandering": "wandering.png", // [중요] wandering.png 파일 필요
         "school_librarian1": "https://placehold.co/800x600/dcedc8/33691e?text=New+Librarian",
         "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library"
     };
@@ -374,7 +374,7 @@
         },
         "revenge_thought": { text: "아이는 대답하지 않는다. 그렇지만, 아이의 마음 속에는 무언가가 한 가지의 감정이 떠오른다.", next: "revenge_word" },
         
-        // [수정] 따옴표까지 붉게 처리
+        // [수정] "복수" 따옴표 포함 전체 붉은색 및 트라우마 폰트 적용
         "revenge_word": { 
             text: "<span class='trauma-dialogue blood-red'>“복수”</span>", 
             next: "revenge_will" 
@@ -451,11 +451,12 @@
         },
         "end_wandering_pre": {
             text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…",
+            // [수정] 배경 제거
             next: "end_wandering"
         },
         "end_wandering": {
             text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>",
-            bg: "wandering", // 여기서 배경 활성화, 오퍼시티는 아래 JS에서 처리
+            bg: "wandering", // 배경 적용
             next: null
         },
 
@@ -510,7 +511,7 @@
         },
         "focus_results": {
             text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.",
-            next: null // 데모 끝
+            next: null
         }
     };
 
@@ -522,7 +523,8 @@
 
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            // [수정] wandering 배경은 오퍼시티 1, 그 외는 0.88
+            
+            // [수정] wandering 배경은 오퍼시티 1 (완전 불투명), 나머지는 0.88
             if (scene.bg === 'wandering') {
                 bgLayer.style.opacity = '1';
             } else {
@@ -655,17 +657,21 @@
             {t: "너 같은 건 쓸모없어", c: "red"}, {t: "공기아까워", c: "red"},
             {t: "멍청이", c: ""}, {t: "사라져", c: "red"}
         ];
+        // 텍스트 누적
         traumaInterval = setInterval(() => {
             const w = words[Math.floor(Math.random() * words.length)];
             const span = document.createElement('span');
             span.className = 'trauma-word';
             if (w.c === 'red') span.classList.add('trauma-red');
             span.innerText = w.t;
+            
             const fontSize = Math.random() * 2 + 1;
             span.style.fontSize = fontSize + "rem";
+            
             span.style.left = Math.random() * 90 + "%";
             span.style.top = Math.random() * 90 + "%";
             span.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+            
             document.body.appendChild(span);
         }, 100);
     }
