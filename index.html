@@ -79,9 +79,9 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            filter: blur(5px); /* 기본 흐림 효과 */
+            filter: blur(5px);
             z-index: 0;
-            transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out; /* 필터 전환 애니메이션 추가 */
+            transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
         }
 
         #ui-layer {
@@ -128,32 +128,26 @@
             width: 100%;
         }
 
-        /* 트라우마 대사 */
         .trauma-dialogue {
             font-family: 'YNAMNEWS', serif !important;
             font-size: 1.5rem;
             letter-spacing: 2px;
         }
 
-        /* 핏빛 붉은색 */
-        .blood-red {
-            color: #A52A2A !important;
-        }
+        .blood-red { color: #A52A2A !important; }
 
-        /* [수정] 일반/해피/트루 엔딩 라벨: 더 선명하게 */
         .ending-label {
             position: absolute;
             top: 20px;
             right: 20px;
             font-size: 1rem;
-            font-weight: bold; /* 굵게 */
+            font-weight: bold;
             font-family: 'YES24', sans-serif;
-            color: #ffffff; /* 완전 흰색 */
+            color: #ffffff;
             opacity: 0;
             animation: fadeIn 2s forwards;
             z-index: 100;
             text-align: right;
-            /* 글자 테두리 효과로 선명함 극대화 */
             text-shadow: 
                 -1px -1px 0 #000,  
                  1px -1px 0 #000,
@@ -161,7 +155,6 @@
                  1px  1px 0 #000;
         }
 
-        /* 트라우마 떠다니는 글자 */
         .trauma-word {
             position: absolute;
             font-family: 'YNAMNEWS', serif;
@@ -294,9 +287,13 @@
         "bad_teacher": "https://placehold.co/800x600/444/fff?text=Teacher+Classroom",
         "book": "https://placehold.co/800x600/3e2723/fff?text=Library+Books",
         "crossroad": "https://placehold.co/800x600/555/eee?text=Crossroad",
-        "wandering": "wandering.png", // [중요] wandering.png 파일
+        "wandering": "wandering.png", 
         "school_librarian1": "https://placehold.co/800x600/dcedc8/33691e?text=New+Librarian",
-        "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library"
+        "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library",
+        // 새로 추가된 배경 (실제 파일로 교체 권장)
+        "bridge": "https://placehold.co/800x600/87CEEB/fff?text=Bridge+of+Love",
+        "jesus_love": "https://placehold.co/800x600/FFD700/fff?text=Jesus+Love",
+        "acceptance": "https://placehold.co/800x600/FFFFFF/000?text=Acceptance"
     };
 
     let currentScore = 0;
@@ -318,10 +315,8 @@
         "3": { text: "그러나 세상은 아이에게 너무나도 차갑고 냉혹했다.", next: "4" },
         "4": { text: "아이: “저, 저기....”", next: "malice_start" },
         "malice_start": { text: "아이를 괴롭히는 근거없는 악의들이 계속해서 쏟아진다...", bg: "malice", next: "trauma_start" },
-        
         "trauma_start": { text: "", bg: "suffering", type: "start_trauma", next: "violence", autoText: " " },
-        
-        "violence": { text: "어떤 아이가 아이의 머리를 퍽 치고 도망간다.\n\n“멍~청이!”", type: "stop_trauma", next: "silence" },
+        "violence": { text: "어떤 아이가 아이의 머리를 퍽 치고 도망간다.\n\n“ㅂㅅ”", type: "stop_trauma", next: "silence" },
         "silence": { text: "아이: “.......”", next: "wither" },
         "wither": { text: "아이는 점점 위축되어간다. 혼자 방에 들어가 조용히 베개를 적시는 일이 많아진다.", next: "cry" },
         "cry": { text: "아이: “흑흑... 엄마아....”", next: "choice_mom" },
@@ -349,7 +344,6 @@
         "mom_request": { text: "엄마는 반의 아이들을 찾아가서 자신의 아이와 사이좋게 지내주길 간곡히 부탁한다.", next: "no_change" },
         "no_change": { text: "그러나 상황이 크게 나아지진 않았다.", next: "worse" },
         "worse": { text: "이전엔 대놓고 있었던 괴롭힘은 점점 더 교묘해져, 어른들의 눈이 닿지 않는 곳에서 그 손길을 뻗쳤다.", next: "choice_teacher" },
-        
         "choice_teacher": {
             text: "선생: “XX아, 친구랑 대화를 해야지. 그렇게 혼자다니면 안 돼.”\n\n아이: “.......”",
             bg: "bad_teacher",
@@ -360,7 +354,6 @@
                 { text: ".......", next: "revenge_thought" }
             ]
         },
-
         "bad_run": {
             lines: [
                 "그들을 피해 멀리 도망가는 것도 하나의 방법일 것이다.",
@@ -378,63 +371,27 @@
             isBadEnd: true
         },
         "revenge_thought": { text: "아이는 대답하지 않는다. 그렇지만, 아이의 마음 속에는 무언가가 한 가지의 감정이 떠오른다.", next: "revenge_word" },
-        
-        // [수정] 따옴표까지 포함해서 붉은색
-        "revenge_word": { 
-            text: "<span class='trauma-dialogue blood-red'>“복수”</span>", 
-            next: "revenge_will" 
-        },
-        "revenge_will": { 
-            text: "<span class='trauma-dialogue'>“나는 저들에게 복수할 것이다.”</span>", 
-            next: "revenge_action" 
-        },
-        "revenge_action": { 
-            text: "<span class='trauma-dialogue'>“저들을 철저히 짓밟고 올라설 것이다.”</span>", 
-            score: -2, 
-            next: "nature" 
-        },
-        
+        "revenge_word": { text: "<span class='trauma-dialogue blood-red'>“복수”</span>", next: "revenge_will" },
+        "revenge_will": { text: "<span class='trauma-dialogue'>“나는 저들에게 복수할 것이다.”</span>", next: "revenge_action" },
+        "revenge_action": { text: "<span class='trauma-dialogue'>“저들을 철저히 짓밟고 올라설 것이다.”</span>", score: -2, next: "nature" },
         "nature": { text: "그러나, 아이는 천성이 그리 모질지 못했다.", next: "wall" },
         "wall": { text: "결국 아이가 선택한 방법은 타인을 철저히 배제하고, 의심하고, 멀어지고, 벽을 치는 것이었다.", next: "friend_book" },
         "friend_book": { text: "그래도, 아이에겐 나름의 친구가 있었다.", next: "book_is" },
         "book_is": { text: "그것은 바로 「책」이었다.", bg: "book", next: "book_world" },
-        
-        "book_world": { 
-            text: "책 속의 세상은 희망차고, 즐거우며, 아이의 상상력을 자극했다.", 
-            score: 2, 
-            next: "grow_wall" 
-        },
-        
+        "book_world": { text: "책 속의 세상은 희망차고, 즐거우며, 아이의 상상력을 자극했다.", score: 2, next: "grow_wall" },
         "grow_wall": { text: "아이는 그렇게 세상과는 벽을 친 채, 책 속의 이야기만을 갈구하며 자라간다.", next: "highschool" },
         "highschool": { text: "아이는 어느덧자라 고등학생이 되었다.", next: "volunteer" },
         "volunteer": { text: "고등학교에서는 봉사점수를 채워야 졸업을 할 수 있었다.", next: "library_club" },
-        "library_club": { text: "아이는 고민하다 평소에 책을 좋아하기도 하고 큰 활동없이도 봉사점수를 채울 수 있는 '도서부'에 들어가게 된다.", next: "library_peace" },
+        "library_club": { text: "아이는 고민하다 평소에 책을 좋아하기도 하고 큰 활동없이도 봉사점수를 채울 수 있는 ‘도서부’에 들어가게 된다.", next: "library_peace" },
         "library_peace": { text: "학교 도서관은 아이에게 평안을 주는 곳이었다.", next: "library_rest" },
         "library_rest": { text: "마음에 쉼을 주기도하고, 딱히 누군가의 눈치를 보지 않아서 그것이 가장 좋았다.", next: "library_books" },
         "library_books": { text: "그리고 좋아하는 책을 마음껏 볼 수 있는 것도 장점이었다.", next: "senior_year" },
         "senior_year": { text: "그리고 고3이 되었다.", next: "conflict" },
-        "conflict": { 
-            text: "아이는 책 속의 세계에 침잠하고 싶었다.\n그러나 아이의 부모는 남들처럼 대학을 가고 사회에 나가길 원했다.\n\n그리고 사회가 그렇게 원했다.", 
-            next: "crossroad_scene" 
-        },
-        "crossroad_scene": {
-            text: "결국, 아이는 진로라는 첫 번째 거대한 갈림길에 놓였다.",
-            bg: "crossroad",
-            score: 1, 
-            next: "inner_voice_1" 
-        },
-        "inner_voice_1": {
-            text: "‘하지만, 난 뭘 해야하지?’\n\n어른들은 아이에게 인생에 대해 깊이 가르쳐주지 못했다.\n어떤 목표를 가져야 하고, 무엇을 좋아하고, 왜 인생을 살아야하는지.",
-            next: "inner_voice_2"
-        },
-        "inner_voice_2": {
-            text: "아이의 부모조차 알려주지 않았다.\n어른들은 그저 “성공한”인생만 주입했다.",
-            next: "inner_voice_3"
-        },
-        "inner_voice_3": {
-            text: "그것이 진정으로 “행복”한 길이라고.",
-            next: "choice_career"
-        },
+        "conflict": { text: "아이는 책 속의 세계에 침잠하고 싶었다.\n그러나 아이의 부모는 남들처럼 대학을 가고 사회에 나가길 원했다.\n\n그리고 사회가 그렇게 원했다.", next: "crossroad_scene" },
+        "crossroad_scene": { text: "결국, 아이는 진로라는 첫 번째 거대한 갈림길에 놓였다.", bg: "crossroad", score: 1, next: "inner_voice_1" },
+        "inner_voice_1": { text: "‘하지만, 난 뭘 해야하지?’\n\n어른들은 아이에게 인생에 대해 깊이 가르쳐주지 못했다.\n어떤 목표를 가져야 하고, 무엇을 좋아하고, 왜 인생을 살아야하는지.", next: "inner_voice_2" },
+        "inner_voice_2": { text: "아이의 부모조차 알려주지 않았다.\n어른들은 그저 “성공한”인생만 주입했다.", next: "inner_voice_3" },
+        "inner_voice_3": { text: "그것이 진정으로 “행복”한 길이라고.", next: "choice_career" },
         "choice_career": {
             text: "‘난…’",
             bg: "crossroad",
@@ -444,78 +401,84 @@
                 { text: "조금만 더 생각해 본다.", next: "thinking_life" }
             ]
         },
+        "conformity_1": { text: "“어차피 나는 특별히 잘 하는 것도… 좋아하는 것도 없는 걸.”\n\n그저 부모가 원하는대로, 사회가 원하는대로….\n그러면 “행복”할까?", next: "conformity_2" },
+        "conformity_2": { text: "아이는 자신의 성적에 맞춰 적당한 과를 지원하여 합격했다.\n그곳에서 조용히 다니며 어찌저지 졸업했다.", next: "end_wandering_pre" },
+        "end_wandering_pre": { text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…", next: "end_wandering" },
+        "end_wandering": { text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>", bg: "wandering", next: null },
+        
+        "thinking_life": { text: "‘쳇바퀴처럼 도는 인생이 정말 인생의 전부일까?’\n\n아이는 고민했다.", next: "seeking_happiness" },
+        "seeking_happiness": { text: "그리고 아이는 나름의 “행복”을 찾고 싶었다.", score: 2, next: "still_lost" },
+        "still_lost": { text: "하지만, 여전히 무엇을 해야할 진 갈피를 잡지 못하고 있었다.", next: "new_librarian" },
+        "new_librarian": { text: "그러던 중 학교 도서관에 새로운 사서 선생님이 오셨다.", bg: "school_librarian1", next: "librarian_effect" },
+        "librarian_effect": { text: "사서 선생님은 이전에 학생들만 대충 관리하던 도서관에 활기를 불어넣었고, 도서관을 더욱 멋지게 가꾸어 놓았다.", bg: "school_librarian2", next: "found_goal" },
+        "found_goal": { text: "처음으로 아이는 목표가 생겼다.\n\n‘나도 나중에 저런 “사서”가 되고싶어.’", score: 4, next: "uni_entry" },
+        "uni_entry": { text: "아이는 그렇게 “사서”라는 직업에 대해 알아보고\n문헌정보학과에 진학했다.", next: "desert_feeling" },
+        "desert_feeling": { text: "대학 합격의 기쁨도 잠시, 아이는 낯선도시, 낯선환경, 부모가 없는 낯선 상황에 어찌할 바를 몰랐다.\n\n그야말로 사막 한 가운데에 떨어진 듯한 기분이었다.", next: "met_stranger" },
+        "met_stranger": { text: "그리고 그곳에서 한 사람을 만났다.\n\n지금까지와는 전혀 다른 삶을 살아가도록 안내하는 한 사람을", next: "stranger_reaction" },
+        "stranger_reaction": { text: "그러나 아이는 낯선사람의 접근에 몸을 움츠렸다.\n오랫동안 벽을 치고 살아온 탓이었다.", next: "gospel_intro" },
+        "gospel_intro": { text: "그 사람은 “복음”이라는 것을 전해주었다.\n\n하지만 아이의 귀엔 들어오지 않았다.", next: "focus_results" },
+        "focus_results": { text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.", next: "choice_gospel" },
 
-        // --- 3-1 루트 (End1) ---
-        "conformity_1": {
-            text: "“어차피 나는 특별히 잘 하는 것도… 좋아하는 것도 없는 걸.”\n\n그저 부모가 원하는대로, 사회가 원하는대로….\n그러면 “행복”할까?",
-            next: "conformity_2"
-        },
-        "conformity_2": {
-            text: "아이는 자신의 성적에 맞춰 적당한 과를 지원하여 합격했다.\n그곳에서 조용히 다니며 어찌저지 졸업했다.",
-            next: "end_wandering_pre"
-        },
-        "end_wandering_pre": {
-            text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…",
-            next: "end_wandering"
-        },
-        "end_wandering": {
-            text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>",
-            bg: "wandering", 
-            next: null
+        // --- 여기서부터 신규 추가 내용 (4번 선택지) ---
+        "choice_gospel": {
+            text: "선배: “당신에게 해 줄 말이 있어요.”",
+            isChoice: true,
+            choices: [
+                { text: "“이상한 사람이다. 멀리 피해 다녀야겠다.”", next: "reject_4_1" },
+                { text: "“그래도 한번 들어나 보자.”", next: "curious_4_2" },
+                { text: "“내가 정말 듣고싶었던 이야기이다. 진지하게 들어보자.”", next: "accept_4_3" }
+            ]
         },
 
-        // --- 3-2 루트 ---
-        "thinking_life": {
-            text: "‘쳇바퀴처럼 도는 인생이 정말 인생의 전부일까?’\n\n아이는 고민했다.",
-            next: "seeking_happiness"
+        // 4-1 루트
+        "reject_4_1": {
+            text: "아이는 경계했다. 거기다 “예수”라는 존재를 믿는 사람의 말을 들을 이유는 더더욱 없었다.\n어쩌다 몇 번 대화를 했지만, 그 뒤로는 연락을 끊어버렸다.",
+            score: 0, 
+            next: "destiny_call"
         },
-        "seeking_happiness": {
-            text: "그리고 아이는 나름의 “행복”을 찾고 싶었다.",
-            score: 2,
-            next: "still_lost"
+        "destiny_call": {
+            text: "하지만, 그럼에도 운명은 아이를 이끌었다.",
+            next: "love_bridge"
         },
-        "still_lost": {
-            text: "하지만, 여전히 무엇을 해야할 진 갈피를 잡지 못하고 있었다.",
-            next: "new_librarian"
+
+        // 4-2 루트
+        "curious_4_2": {
+            text: "사실 “죄”니, “구원”이니, “복음”이니 하는 것들은 다 멀게만 느껴지는 것이었다.\n\n그래도 궁금했다.\n도대체 <b>“예수님”</b>이라는 존재가 누구인지.\n\n대단한 이유는 아니다.\n그냥 지적 호기심에 이끌렸을 뿐이었다.",
+            score: 1,
+            next: "love_bridge"
         },
-        "new_librarian": {
-            text: "그러던 중 학교 도서관에 새로운 사서 선생님이 오셨다.",
-            bg: "school_librarian1",
-            next: "librarian_effect"
+
+        // 공통 (4-1, 4-2 합류)
+        "love_bridge": {
+            text: "선배는 예수님의 “사랑”에 대해서 이야기 해 주었다.\n\n나를 세상 그 누구보다, 무엇보다 사랑하시고\n자신의 목숨을 다 바쳐 사랑하셨다는 사실을….",
+            bg: "bridge",
+            next: "realize_gospel_delayed"
         },
-        "librarian_effect": {
-            text: "사서 선생님은 이전에 학생들만 대충 관리하던 도서관에 활기를 불어넣었고, 도서관을 더욱 멋지게 가꾸어 놓았다.",
-            bg: "school_librarian2",
-            next: "found_goal"
+        "realize_gospel_delayed": {
+            text: "“복음”은 예수님의 “사랑”에 대한 이야기라고 하였다.\n이 말은 내가 진실로 듣고싶었던 말이었다.\n\n그동안 나는 이 세상에서 ‘무쓸모’하고 ‘사랑받을 수 없는’존재로 여겨왔기 때문이었다.\n\n그런데, 이런 ‘나’를 사랑한다니",
+            score: 3, // 지연된 성장 점수
+            bg: "jesus_love",
+            next: "unconditional_love"
         },
-        "found_goal": {
-            text: "처음으로 아이는 목표가 생겼다.\n\n‘나도 나중에 저런 “사서”가 되고싶어.’",
+
+        // 4-3 루트 (직행)
+        "accept_4_3": {
+            text: "“복음”은 예수님의 “사랑”에 대한 이야기라고 하였다.\n이 말은 내가 진실로 듣고싶었던 말이었다.\n\n그동안 나는 이 세상에서 ‘무쓸모’하고 ‘사랑받을 수 없는’존재로 여겨왔기 때문이었다.\n\n그런데, 이런 ‘나’를 사랑한다니",
+            score: 6, // 직행 보너스 점수
+            bg: "jesus_love",
+            next: "unconditional_love"
+        },
+
+        // 공통 결말
+        "unconditional_love": {
+            text: "아무런 조건없이, 아무런 배경없이.\n\n그저 있는 그대로의 “나”를 사랑하여주신다 하셨다.",
+            next: "final_decision"
+        },
+        "final_decision": {
+            text: "나는 그 자리에서 예수님을 믿기로 결심했다.",
             score: 4,
-            next: "uni_entry"
-        },
-        "uni_entry": {
-            text: "아이는 그렇게 “사서”라는 직업에 대해 알아보고\n문헌정보학과에 진학했다.",
-            next: "desert_feeling"
-        },
-        "desert_feeling": {
-            text: "대학 합격의 기쁨도 잠시, 아이는 낯선도시, 낯선환경, 부모가 없는 낯선 상황에 어찌할 바를 몰랐다.\n\n그야말로 사막 한 가운데에 떨어진 듯한 기분이었다.",
-            next: "met_stranger"
-        },
-        "met_stranger": {
-            text: "그리고 그곳에서 한 사람을 만났다.\n\n지금까지와는 전혀 다른 삶을 살아가도록 안내하는 한 사람을",
-            next: "stranger_reaction"
-        },
-        "stranger_reaction": {
-            text: "그러나 아이는 낯선사람의 접근에 몸을 움츠렸다.\n오랫동안 벽을 치고 살아온 탓이었다.",
-            next: "gospel_intro"
-        },
-        "gospel_intro": {
-            text: "그 사람은 “복음”이라는 것을 전해주었다.\n\n하지만 아이의 귀엔 들어오지 않았다.",
-            next: "focus_results"
-        },
-        "focus_results": {
-            text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.",
-            next: null
+            bg: "acceptance",
+            next: null // 데모 끝
         }
     };
 
@@ -528,7 +491,7 @@
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
             
-            // [수정] wandering 배경일 때는 완전 불투명(opacity: 1) 및 흐림 제거(filter: none)
+            // [수정] wandering 배경일 때는 완전 불투명 및 흐림 제거
             if (scene.bg === 'wandering') {
                 bgLayer.style.opacity = '1';
                 bgLayer.style.filter = 'none';
@@ -595,7 +558,7 @@
                 };
                 choiceBox.appendChild(btn);
             } else {
-                if (sceneId === "end_wandering" || sceneId === "focus_results") {
+                if (sceneId === "end_wandering" || sceneId === "final_decision") {
                     const restartBtn = document.createElement('button');
                     restartBtn.className = 'btn';
                     restartBtn.innerText = "처음으로 돌아가기";
