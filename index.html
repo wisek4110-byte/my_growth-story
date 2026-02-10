@@ -105,7 +105,6 @@
             flex-shrink: 0;
         }
 
-        /* 메인 텍스트 영역 */
         #display-area {
             flex-grow: 1;
             padding: 20px;
@@ -115,7 +114,7 @@
             align-items: center;
             text-align: center;
             width: 100%;
-            position: relative; /* 자식 요소(엔딩라벨)의 절대 위치 기준점 */
+            position: relative;
         }
 
         .dialogue {
@@ -136,20 +135,25 @@
             letter-spacing: 2px;
         }
 
-        /* [수정] 일반/해피/트루 엔딩 라벨: 화면 우측 상단 고정 */
+        /* [수정] 핏빛 붉은색 스타일 추가 */
+        .blood-red {
+            color: #A52A2A;
+        }
+
+        /* 일반/해피/트루 엔딩 라벨: 화면 우측 상단 고정 */
         .ending-label {
-            position: absolute; /* 절대 위치 */
-            top: 20px;          /* 위에서 20px */
-            right: 20px;        /* 오른쪽에서 20px */
+            position: absolute;
+            top: 20px;
+            right: 20px;
             font-size: 1rem;
             font-weight: normal;
             font-family: 'YES24', sans-serif;
             color: var(--text-color);
             opacity: 0;
-            animation: fadeIn 3s forwards; /* 천천히 나타남 */
+            animation: fadeIn 3s forwards;
             z-index: 100;
             text-align: right;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8); /* 가독성 확보 */
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
 
         /* 트라우마 떠다니는 글자 */
@@ -285,6 +289,7 @@
         "bad_teacher": "https://placehold.co/800x600/444/fff?text=Teacher+Classroom",
         "book": "https://placehold.co/800x600/3e2723/fff?text=Library+Books",
         "crossroad": "https://placehold.co/800x600/555/eee?text=Crossroad",
+        // [수정] wandering.png 파일명 적용
         "wandering": "wandering.png",
         "school_librarian1": "https://placehold.co/800x600/dcedc8/33691e?text=New+Librarian",
         "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library"
@@ -370,8 +375,9 @@
         },
         "revenge_thought": { text: "아이는 대답하지 않는다. 그렇지만, 아이의 마음 속에는 무언가가 한 가지의 감정이 떠오른다.", next: "revenge_word" },
         
+        // [수정] "복수" 글자에만 blood-red 클래스 적용
         "revenge_word": { 
-            text: "<span class='trauma-dialogue'>“복수”</span>", 
+            text: "<span class='trauma-dialogue'>“<span class='blood-red'>복수</span>”</span>", 
             next: "revenge_will" 
         },
         "revenge_will": { 
@@ -446,13 +452,12 @@
         },
         "end_wandering_pre": {
             text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…",
-            bg: "wandering",
+            // [수정] 여기서 배경 제거
             next: "end_wandering"
         },
         "end_wandering": {
-            // [수정] End1: 화면 우측 상단 고정 (.ending-label 사용)
             text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>",
-            bg: "wandering",
+            bg: "wandering", // [수정] 여기서만 wandering 배경 표시
             next: null
         },
 
@@ -647,7 +652,7 @@
             {t: "너 같은 건 쓸모없어", c: "red"}, {t: "공기아까워", c: "red"},
             {t: "멍청이", c: ""}, {t: "사라져", c: "red"}
         ];
-        // 텍스트 누적 (remove 없음)
+        // 텍스트 누적
         traumaInterval = setInterval(() => {
             const w = words[Math.floor(Math.random() * words.length)];
             const span = document.createElement('span');
@@ -679,4 +684,3 @@
 </script>
 </body>
 </html>
-
