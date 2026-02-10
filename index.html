@@ -79,9 +79,9 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            filter: blur(5px);
+            filter: blur(5px); /* 기본 흐림 효과 */
             z-index: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out; /* 필터 전환 애니메이션 추가 */
         }
 
         #ui-layer {
@@ -128,32 +128,37 @@
             width: 100%;
         }
 
-        /* 트라우마 대사 (복수 등) 스타일 */
+        /* 트라우마 대사 */
         .trauma-dialogue {
             font-family: 'YNAMNEWS', serif !important;
             font-size: 1.5rem;
             letter-spacing: 2px;
         }
 
-        /* 핏빛 붉은색 스타일 (#A52A2A) */
+        /* 핏빛 붉은색 */
         .blood-red {
             color: #A52A2A !important;
         }
 
-        /* 일반/해피/트루 엔딩 라벨: 화면 우측 상단 고정 */
+        /* [수정] 일반/해피/트루 엔딩 라벨: 더 선명하게 */
         .ending-label {
             position: absolute;
             top: 20px;
             right: 20px;
             font-size: 1rem;
-            font-weight: normal;
+            font-weight: bold; /* 굵게 */
             font-family: 'YES24', sans-serif;
-            color: var(--text-color);
+            color: #ffffff; /* 완전 흰색 */
             opacity: 0;
-            animation: fadeIn 3s forwards;
+            animation: fadeIn 2s forwards;
             z-index: 100;
             text-align: right;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            /* 글자 테두리 효과로 선명함 극대화 */
+            text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000;
         }
 
         /* 트라우마 떠다니는 글자 */
@@ -289,7 +294,7 @@
         "bad_teacher": "https://placehold.co/800x600/444/fff?text=Teacher+Classroom",
         "book": "https://placehold.co/800x600/3e2723/fff?text=Library+Books",
         "crossroad": "https://placehold.co/800x600/555/eee?text=Crossroad",
-        "wandering": "wandering.png", // [중요] wandering.png 파일 필요
+        "wandering": "wandering.png", // [중요] wandering.png 파일
         "school_librarian1": "https://placehold.co/800x600/dcedc8/33691e?text=New+Librarian",
         "school_librarian2": "https://placehold.co/800x600/aed581/33691e?text=Vibrant+Library"
     };
@@ -374,7 +379,7 @@
         },
         "revenge_thought": { text: "아이는 대답하지 않는다. 그렇지만, 아이의 마음 속에는 무언가가 한 가지의 감정이 떠오른다.", next: "revenge_word" },
         
-        // [수정] "복수" 따옴표 포함 전체 붉은색 및 트라우마 폰트 적용
+        // [수정] 따옴표까지 포함해서 붉은색
         "revenge_word": { 
             text: "<span class='trauma-dialogue blood-red'>“복수”</span>", 
             next: "revenge_will" 
@@ -451,12 +456,11 @@
         },
         "end_wandering_pre": {
             text: "그럼에도 여전히 헤매고 있다. 자신이 누구인지도 모른 채…",
-            // [수정] 배경 제거
             next: "end_wandering"
         },
         "end_wandering": {
             text: "<span class='ending-label'>[End1: 이 또한 삶이리라]</span>",
-            bg: "wandering", // 배경 적용
+            bg: "wandering", 
             next: null
         },
 
@@ -524,11 +528,13 @@
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
             
-            // [수정] wandering 배경은 오퍼시티 1 (완전 불투명), 나머지는 0.88
+            // [수정] wandering 배경일 때는 완전 불투명(opacity: 1) 및 흐림 제거(filter: none)
             if (scene.bg === 'wandering') {
                 bgLayer.style.opacity = '1';
+                bgLayer.style.filter = 'none';
             } else {
                 bgLayer.style.opacity = '0.88';
+                bgLayer.style.filter = 'blur(5px)';
             }
         } else {
             bgLayer.style.opacity = '0';
@@ -657,21 +663,17 @@
             {t: "너 같은 건 쓸모없어", c: "red"}, {t: "공기아까워", c: "red"},
             {t: "멍청이", c: ""}, {t: "사라져", c: "red"}
         ];
-        // 텍스트 누적
         traumaInterval = setInterval(() => {
             const w = words[Math.floor(Math.random() * words.length)];
             const span = document.createElement('span');
             span.className = 'trauma-word';
             if (w.c === 'red') span.classList.add('trauma-red');
             span.innerText = w.t;
-            
             const fontSize = Math.random() * 2 + 1;
             span.style.fontSize = fontSize + "rem";
-            
             span.style.left = Math.random() * 90 + "%";
             span.style.top = Math.random() * 90 + "%";
             span.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
-            
             document.body.appendChild(span);
         }, 100);
     }
