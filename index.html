@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>continue in what you have inside</title>
     <style>
+        /* --- [수정] 로컬 폰트 파일 연결 --- */
+        /* HTML 파일과 같은 폴더에 'YES24.ttf' 파일이 있어야 합니다. */
+        @font-face {
+            font-family: 'YES24';
+            src: url('YES24.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        /* HTML 파일과 같은 폴더에 'YNAMNEWS.ttf' 파일이 있어야 합니다. */
+        @font-face {
+            font-family: 'YNAMNEWS'; 
+            src: url('YNAMNEWS(B).ttf') format('truetype');
+            font-style: normal;
+        }
+
         :root {
             --bg-lightness: 5%;
             --base-bg-color: hsl(0, 0%, var(--bg-lightness));
@@ -18,7 +34,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+            font-family: 'YES24', 'Malgun Gothic', sans-serif; /* 기본 폰트 적용 */
             background-color: var(--base-bg-color);
             color: var(--text-color);
             display: flex;
@@ -54,6 +70,7 @@
             .btn { padding: 16px !important; font-size: 1rem !important; }
         }
 
+        /* 배경 이미지 레이어 */
         #bg-layer {
             position: absolute;
             top: 0;
@@ -110,9 +127,10 @@
             max-width: 90%;
         }
 
+        /* 트라우마 텍스트 스타일 */
         .trauma-word {
             position: absolute;
-            font-family: 'Courier New', monospace;
+            font-family: 'YNAMNEWS', serif; /* 트라우마 폰트 적용 */
             font-weight: bold;
             pointer-events: none;
             opacity: 0;
@@ -167,6 +185,7 @@
             max-width: 500px;
             margin: 0 auto;
             -webkit-tap-highlight-color: transparent;
+            font-family: 'YES24', sans-serif; /* 버튼에도 폰트 적용 */
         }
 
         .btn:hover {
@@ -176,6 +195,7 @@
         
         .btn:active { transform: scale(0.98); }
 
+        /* [수정] 다음 버튼 스타일 */
         .next-btn {
             border: none;
             font-style: italic;
@@ -184,6 +204,16 @@
             background: transparent;
             margin-left: auto;
             width: auto;
+            /* 자간 변화 부드럽게 */
+            transition: letter-spacing 0.3s ease; 
+        }
+
+        /* [수정] 마우스 올렸을 때 자간만 넓어짐 (색상 변화 X) */
+        .next-btn:hover {
+            letter-spacing: 5px; /* 자간 확장 */
+            background: transparent; /* 배경 투명 유지 */
+            transform: none; /* 위치 이동 없음 */
+            /* color 속성을 지정하지 않아 기존 색상 유지 */
         }
 
         #notif {
@@ -234,6 +264,8 @@
 </div>
 
 <script>
+    // --- 배경 이미지 설정 ---
+    // *중요* 같은 폴더에 이미지 파일(baby.png 등)이 있어야 합니다.
     const bgImages = {
         "baby": "baby.png", 
         "malice": "https://placehold.co/800x600/220000/red?text=Malice",
@@ -427,7 +459,23 @@
         },
         "desert_feeling": {
             text: "대학 합격의 기쁨도 잠시, 아이는 낯선도시, 낯선환경, 부모가 없는 낯선 상황에 어찌할 바를 몰랐다.\n\n그야말로 사막 한 가운데에 떨어진 듯한 기분이었다.",
-            next: null
+            next: "met_stranger"
+        },
+        "met_stranger": {
+            text: "그리고 그곳에서 한 사람을 만났다.\n\n지금까지와는 전혀 다른 삶을 살아가도록 안내하는 한 사람을.",
+            next: "stranger_reaction"
+        },
+        "stranger_reaction": {
+            text: "그러나 아이는 낯선사람의 접근에 몸을 움츠렸다.\n오랫동안 벽을 치고 살아온 탓이었다.",
+            next: "gospel_intro"
+        },
+        "gospel_intro": {
+            text: "그 사람은 “복음”이라는 것을 전해주었다.\n\n하지만 아이의 귀엔 들어오지 않았다.",
+            next: "focus_results"
+        },
+        "focus_results": {
+            text: "아이의 관심은 당장 눈에 보이는 “성과”이지,\n실체가 확실하지 않은 “복”이 아니었다.",
+            next: null // 데모 끝
         }
     };
 
@@ -439,7 +487,7 @@
 
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            bgLayer.style.opacity = '0.8'; // 오퍼시티 80로 조정
+            bgLayer.style.opacity = '0.88'; // [수정] 오퍼시티 88로 조정
         } else {
             bgLayer.style.opacity = '0';
             bgLayer.style.backgroundImage = 'none';
@@ -499,7 +547,7 @@
                 };
                 choiceBox.appendChild(btn);
             } else {
-                if (sceneId === "end_wandering" || sceneId === "desert_feeling") {
+                if (sceneId === "end_wandering" || sceneId === "focus_results") {
                     const restartBtn = document.createElement('button');
                     restartBtn.className = 'btn';
                     restartBtn.innerText = "처음으로 돌아가기";
@@ -596,7 +644,3 @@
 </script>
 </body>
 </html>
-
-
-
-
