@@ -6,19 +6,20 @@
     <title>continue in what you have inside</title>
     <style>
         /* --- [수정] 로컬 폰트 파일 연결 --- */
-        /* HTML 파일과 같은 폴더에 'YES24.ttf' 파일이 있어야 합니다. */
+        
+        /* 기본 폰트: YES24MyoungjoR.ttf */
         @font-face {
             font-family: 'YES24';
-            src: url('YES24.ttf') format('truetype'); 
+            src: url('YES24MyoungjoR.ttf') format('truetype'); 
             font-weight: normal;
             font-style: normal;
         }
         
-        /* HTML 파일과 같은 폴더에 'YNAMNEWS.ttf' 파일이 있어야 합니다. */
+        /* 트라우마 폰트: YEONGNAMNEWS_Ku_Sang.ttf */
         @font-face {
             font-family: 'YNAMNEWS'; 
-            src: url('YNAMNEWS.ttf') format('truetype');
-            font-weight: bold; /* (B)라고 하셔서 bold 처리 */
+            src: url('YEONGNAMNEWS_Ku_Sang.ttf') format('truetype');
+            font-weight: bold;
             font-style: normal;
         }
 
@@ -196,7 +197,7 @@
         
         .btn:active { transform: scale(0.98); }
 
-        /* [수정] 다음 버튼 스타일 */
+        /* 다음 버튼 스타일 */
         .next-btn {
             border: none;
             font-style: italic;
@@ -209,12 +210,11 @@
             transition: letter-spacing 0.3s ease; 
         }
 
-        /* [수정] 마우스 올렸을 때 자간만 넓어짐 (색상 변화 X) */
+        /* 다음 버튼 호버 효과: 색상은 그대로, 자간만 넓어짐 */
         .next-btn:hover {
             letter-spacing: 5px; /* 자간 확장 */
-            background: transparent; /* 배경 투명 유지 */
-            transform: none; /* 위치 이동 없음 */
-            /* color 속성을 지정하지 않아 기존 색상 유지 */
+            background: transparent;
+            transform: none;
         }
 
         #notif {
@@ -266,7 +266,7 @@
 
 <script>
     // --- 배경 이미지 설정 ---
-    // *중요* 같은 폴더에 이미지 파일(baby.png 등)이 있어야 합니다.
+    // 같은 폴더에 이미지 파일(baby.png 등)이 있어야 합니다.
     const bgImages = {
         "baby": "baby.png", 
         "malice": "https://placehold.co/800x600/220000/red?text=Malice",
@@ -488,7 +488,7 @@
 
         if (scene.bg && bgImages[scene.bg]) {
             bgLayer.style.backgroundImage = `url('${bgImages[scene.bg]}')`;
-            bgLayer.style.opacity = '0.88'; // [수정] 오퍼시티 88로 조정
+            bgLayer.style.opacity = '0.88'; // [확인] 오퍼시티 88
         } else {
             bgLayer.style.opacity = '0';
             bgLayer.style.backgroundImage = 'none';
